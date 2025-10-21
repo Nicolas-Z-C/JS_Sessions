@@ -31,8 +31,10 @@ console.log(marvel.coords["lat"])
 // Llamada a la función dentro del objeto
 Objeto1.mostrarInformacion("Valor 1", "Valor 2");
 
+// la propagacion es generar una copia de un array o diccionario,
+// este no se linkea con el original sino solo se copia
 // tercera y ultima prueba pero de propagacion 
-const cambiaNombre=({...persona})=> {
+const cambiaNombre = ({...persona}) => {
     persona.nombre = "Tony";
     return persona;
 }
