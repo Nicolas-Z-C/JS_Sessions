@@ -1,2 +1,0 @@
-const Heroes = new map ([])
-
