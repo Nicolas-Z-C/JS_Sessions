@@ -24,5 +24,8 @@ boton1.addEventListener('click', ()=>{
 boton2.addEventListener('click', ()=>{
     boton2.textContent="RAAAAAAAAAAAAAAAA";
     boton2.style.backgroundColor="red";
-    boton2.style.border= '2px solid';
+    boton2.classList.add('border')
 })
+
+boton1.style.textTransform = "uppercase";
+boton1.setAttribute("style","text-transform:capitalize")
