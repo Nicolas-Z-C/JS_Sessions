@@ -1,5 +1,5 @@
 {
-  "name": "vite",
+  "name": "vite-1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,5 +10,9 @@
   },
   "devDependencies": {
     "vite": "^7.1.7"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8"
   }
 }
