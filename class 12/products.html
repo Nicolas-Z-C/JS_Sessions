@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica</title>
+    <script type="module" src="./js/products.js" defer></script>
+    <link rel="stylesheet" href="./css/products.css">
+</head>
+
+<body>
+    <main>
+        <nav>
+            <table>
+                <tr>
+                    <td>
+                        <a href="./index.html">Regresar</a>
+                    </td>
+                </tr>
+            </table>
+        </nav>
+        <div id="container">
+            <form action="#">
+                <table id="tblFrmProducts">
+                    <thead>
+                        <tr>
+                            <td><input type="text" name="code" id="code" placeholder="Còdigo"></td>
+                            <td><input type="text" name="name" id="name" placeholder="Nombre"></td>
+                            <td><input type="text" name="price" id="price" placeholder="Precio"></td>
+                            <td><input type="text" name="vat" id="VAT" placeholder="IVA"></td>
+                            <td><input type="button" id="save" value="Guardar"></td>
+                        </tr>
+                    </thead>
+                </table>
+            </form>
+            <div id="list">
+                <table id="tblProductList" border="1">
+                    <thead>
+                        <tr>
+                            <th class="tbl-headers">Código</th>
+                            <th class="tbl-headers">Nombre</th>
+                            <th class="tbl-headers">Precio</th>
+                            <th class="tbl-headers">IVA</th>
+                            <th></th>
+                        <tr>
+                    </thead>
+                    <tbody id="dataTable">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

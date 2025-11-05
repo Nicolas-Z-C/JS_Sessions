@@ -1,0 +1,9 @@
+#tblProductList{
+    margin-top: 50px;
+    border-collapse: collapse;
+}
+
+.tbl-headers {
+    padding: 10px;
+    width: 100px;
+}
