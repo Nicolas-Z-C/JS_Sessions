@@ -1,0 +1,19 @@
+.parrafo{
+    background-color: black;
+}
+
+#bt1{
+    transition: background-color .2s ease, color .2s ease, filter .2s ease;
+}
+
+#bt1.aplicado {
+    background-color: #be2626; 
+    color: green;
+    border: none;
+    cursor: not-allowed;
+    filter: saturate(1.1);
+}
+
+#bt2.border {
+    border-radius: 10%;
+}

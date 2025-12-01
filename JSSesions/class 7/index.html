@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/class 7/static.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <p class="parrafo">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos repellendus pariatur, doloremque, repellat distinctio ducimus ad molestias et eaque placeat ullam rerum. Itaque non rem suscipit dolore sed, iusto temporibus?</p>
+    <button onclick="Funcion1()">Resaltar</button>
+    <ul>
+        <li class="listas">lorem ip</li>
+        <li class="listas">lorem ip</li>
+        <li class="listas">lorem</li>
+        <li class="listas">lorem</li>
+    </ul>
+    <button onclick="Funcion2()">FFF</button>
+    <hr>
+    <button id="bt1">elver e</button>
+    <button id="bt2">ALVARIÑO</button>
+
+    <label>
+        <input type="checkbox" id="cambio" checked>
+        habilitar boton
+    </label>
+    <button id="accion">accion</button>
+    <script>
+        const  chk = document.querySelector("#cambio");
+        const acn = document.querySelector("#accion");
+
+        function sync() {acn.diasabled != chk.checked;}
+        chk.addEventListener('change',sync);
+        sync();
+    </script>
+    <button id="save">Guardar</button>
+    <script>
+    const save = document.querySelector('#save');
+
+    save.addEventListener('click', async () => {
+        try {
+        save.disabled = true;
+        save.textContent = 'Guardando…';
+        // simulación de trabajo async
+        await new Promise(r => setTimeout(r, 1500));
+        save.textContent = 'Listo';
+        } catch (e) {
+        save.textContent = 'Reintentar';
+        } finally {
+        save.disabled = false; // o déjalo true para evitar reintentos
+        }
+    });
+    </script>
+</body>
+</html>

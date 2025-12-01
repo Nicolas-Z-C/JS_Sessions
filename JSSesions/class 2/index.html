@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manipulación del DOM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        #miImagen {
+            width: 100%;
+            max-width: 300px;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        #miImagen:hover {
+            transform: scale(1.05);
+        }
+        
+        #miTexto {
+            text-align: center;
+            font-size: 20px;
+            color: #555;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+        
+        .botones {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        #btnCambiarImagen {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        #btnCambiarTexto {
+            background: #2196F3;
+            color: white;
+        }
+        
+        #btnRestaurar {
+            background: #FF9800;
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .contador {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manipulación del DOM con JavaScript</h1>
+        
+        <!-- Imagen que vamos a cambiar -->
+        <img id="miImagen" 
+             src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400" 
+             alt="Paisaje montañoso">
+        
+        <!-- Texto que vamos a modificar -->
+        <p id="miTexto">Este es el texto original. ¡Haz click en los botones!</p>
+        
+        <!-- Botones con funcionalidad -->
+        <div class="botones">
+            <button id="btnCambiarImagen">Cambiar Imagen</button>
+            <button id="btnCambiarTexto">Cambiar Texto</button>
+            <button id="btnRestaurar">Restaurar Todo</button>
+        </div>
+        
+        <div class="contador">
+            <p>Clicks totales: <strong id="contadorClicks">0</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // Seleccionar elementos del DOM
+        const imagen = document.querySelector('#miImagen');
+        const texto = document.querySelector('#miTexto');
+        const btnImagen = document.querySelector('#btnCambiarImagen');
+        const btnTexto = document.querySelector('#btnCambiarTexto');
+        const btnRestaurar = document.querySelector('#btnRestaurar');
+        const contadorElement = document.querySelector('#contadorClicks');
+        
+        // Variables para controlar el estado
+        let imagenCambiada = false;
+        let contador = 0;
+        
+        // Arrays con diferentes opciones
+        const imagenes = [
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
+            'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400',
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400'
+        ];
+        
+        const textos = [
+            '¡Texto modificado con JavaScript! 🚀',
+            '¿Viste cómo cambió el contenido? 😎',
+            'El DOM es muy poderoso ⚡',
+            'JavaScript hace magia ✨'
+        ];
+        
+        let imagenActual = 0;
+        
+        // Funcionalidad del botón de cambiar imagen
+        btnImagen.addEventListener('click', function() {
+            imagenActual = (imagenActual + 1) % imagenes.length;
+            imagen.src = imagenes[imagenActual];
+            imagen.alt = 'Paisaje ' + (imagenActual + 1);
+            
+            incrementarContador();
+        });
+        
+        // Funcionalidad del botón de cambiar texto
+        btnTexto.addEventListener('click', () => {
+            const textoAleatorio = textos[Math.floor(Math.random() * textos.length)];
+            texto.textContent = textoAleatorio;
+            texto.style.color = generarColorAleatorio();
+            
+            incrementarContador();
+        });
+        
+        // Funcionalidad del botón restaurar
+        btnRestaurar.addEventListener('click', function() {
+            imagen.src = imagenes[0];
+            imagen.alt = 'Paisaje montañoso';
+            texto.textContent = 'Este es el texto original. ¡Haz click en los botones!';
+            texto.style.color = '#555';
+            imagenActual = 0;
+            
+            incrementarContador();
+        });
+        
+        // Función auxiliar para incrementar contador
+        function incrementarContador() {
+            contador++;
+            contadorElement.textContent = contador;
+        }
+        
+        // Función para generar color aleatorio
+        function generarColorAleatorio() {
+            const colores = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6'];
+            return colores[Math.floor(Math.random() * colores.length)];
+        }
+        
+        // Ejemplo de evento adicional: cambiar imagen al pasar el mouse
+        imagen.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 0 20px rgba(103, 126, 234, 0.8)';
+        });
+        
+        imagen.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'none';
+        });
+    </script>
+</body>
+</html>

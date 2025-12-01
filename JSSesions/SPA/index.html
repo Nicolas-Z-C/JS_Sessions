@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Académica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navegación */
+        nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        nav.active {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links button {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: #333;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-links button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-links button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        #logout {
+            background: #e74c3c;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #logout:hover {
+            background: #c0392b;
+        }
+
+        /* Contenedor principal */
+        #app {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Login */
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button[type="submit"], .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button[type="submit"]:hover, .btn:hover {
+            background: #5568d3;
+        }
+
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tablas */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            color: #667eea;
+        }
+
+        .btn-add {
+            padding: 0.75rem 1.5rem;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-add:hover {
+            background: #229954;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        table th, table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+        }
+
+        table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #667eea;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .error-message {
+            background: #e74c3c;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav id="navbar">
+        <h1>Sistema Académico</h1>
+        <div class="nav-links">
+            <button data-view="dashboard" class="active">Dashboard</button>
+            <button data-view="profesores">Profesores</button>
+            <button data-view="cursos">Cursos</button>
+        </div>
+        <button id="logout">Cerrar Sesión</button>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div id="app"></div>
+
+    <!-- Modal para formularios -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Título</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Utilidades de almacenamiento
+        const storage = {
+            get: (key) => {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            },
+            set: (key, value) => {
+                localStorage.setItem(key, JSON.stringify(value));
+            },
+            remove: (key) => {
+                localStorage.removeItem(key);
+            }
+        };
+
+        // Inicializar datos de ejemplo
+        if (!storage.get('admins')) {
+            storage.set('admins', [{ email: 'admin@test.com', password: '123' }]);
+        }
+        if (!storage.get('profesores')) {
+            storage.set('profesores', [
+                { id: 1, nombre: 'Juan Pérez', email: 'juan@test.com', especialidad: 'Matemáticas' },
+                { id: 2, nombre: 'María García', email: 'maria@test.com', especialidad: 'Física' }
+            ]);
+        }
+        if (!storage.get('cursos')) {
+            storage.set('cursos', [
+                { id: 1, nombre: 'Cálculo I', codigo: 'MAT101', creditos: 4, profesorId: 1 },
+                { id: 2, nombre: 'Física Mecánica', codigo: 'FIS201', creditos: 3, profesorId: 2 }
+            ]);
+        }
+
+        // Router
+        class Router {
+            constructor() {
+                this.currentView = null;
+                this.isLoggedIn = !!storage.get('sessionId');
+            }
+
+            navigate(viewName) {
+                if (!this.isLoggedIn && viewName !== 'login') {
+                    this.showLogin();
+                    return;
+                }
+                
+                const views = {
+                    login: this.showLogin,
+                    dashboard: this.showDashboard,
+                    profesores: this.showProfesores,
+                    cursos: this.showCursos
+                };
+
+                if (views[viewName]) {
+                    this.currentView = viewName;
+                    views[viewName]();
+                    this.updateNavbar(viewName);
+                }
+            }
+
+            updateNavbar(viewName) {
+                const navbar = document.getElementById('navbar');
+                if (viewName === 'login') {
+                    navbar.classList.remove('active');
+                } else {
+                    navbar.classList.add('active');
+                    document.querySelectorAll('.nav-links button').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.view === viewName);
+                    });
+                }
+            }
+
+            showLogin() {
+                const app = document.getElementById('app');
+                app.innerHTML = `
+                    <div class="login-container container">
+                        <h2>Iniciar Sesión</h2>
+                        <div id="errorMessage" class="error-message"></div>
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Contraseña:</label>
+                                <input type="password" id="password" name="password" required>
+                            </div>
+                            <button type="submit">Iniciar Sesión</button>
+                        </form>
+                        <p style="margin-top: 1rem; text-align: center; color: #666;">
+                            Usuario de prueba: admin@test.com / 123
+                        </p>
+                    </div>
+                `;
+
+                document.getElementById('loginForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = e.target.email.value;
+                    const password = e.target.password.value;
+                    const admins = storage.get('admins');
+                    const user = admins.find(u => u.email === email && u.password === password);
+
+                    if (user) {
+                        storage.set('sessionId', Date.now());
+                        this.isLoggedIn = true;
+                        this.navigate('dashboard');
+                    } else {
+                        const errorMsg = document.getElementById('errorMessage');
+                        errorMsg.textContent = 'Credenciales incorrectas';
+                        errorMsg.classList.add('active');
+                    }
+                });
+            }
+
+            showDashboard() {
+                const profesores = storage.get('profesores') || [];
+                const cursos = storage.get('cursos') || [];
+
+                const app = document.getElementById('app');
+                app.innerHTML = `
+                    <div class="container">
+                        <h2>Dashboard</h2>
+                        <div class="dashboard-grid">
+                            <div class="card" onclick="router.navigate('profesores')">
+                                <h3>${profesores.length}</h3>
+                                <p>Profesores</p>
+                            </div>
+                            <div class="card" onclick="router.navigate('cursos')">
+                                <h3>${cursos.length}</h3>
+                                <p>Cursos</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            showProfesores() {
+                const profesores = storage.get('profesores') || [];
+                const app = document.getElementById('app');
+                
+                app.innerHTML = `
+                    <div class="container">
+                        <div class="section-header">
+                            <h2>Gestión de Profesores</h2>
+                            <button class="btn-add" onclick="modalManager.openProfesorModal()">+ Agregar Profesor</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Especialidad</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${profesores.map(p => `
+                                    <tr>
+                                        <td>${p.id}</td>
+                                        <td>${p.nombre}</td>
+                                        <td>${p.email}</td>
+                                        <td>${p.especialidad}</td>
+                                        <td>
+                                            <button class="btn-edit" onclick="modalManager.openProfesorModal(${p.id})">Editar</button>
+                                            <button class="btn-delete" onclick="crud.deleteProfesor(${p.id})">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            showCursos() {
+                const cursos = storage.get('cursos') || [];
+                const profesores = storage.get('profesores') || [];
+                const app = document.getElementById('app');
+                
+                app.innerHTML = `
+                    <div class="container">
+                        <div class="section-header">
+                            <h2>Gestión de Cursos</h2>
+                            <button class="btn-add" onclick="modalManager.openCursoModal()">+ Agregar Curso</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Código</th>
+                                    <th>Créditos</th>
+                                    <th>Profesor</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${cursos.map(c => {
+                                    const profesor = profesores.find(p => p.id === c.profesorId);
+                                    return `
+                                        <tr>
+                                            <td>${c.id}</td>
+                                            <td>${c.nombre}</td>
+                                            <td>${c.codigo}</td>
+                                            <td>${c.creditos}</td>
+                                            <td>${profesor ? profesor.nombre : 'Sin asignar'}</td>
+                                            <td>
+                                                <button class="btn-edit" onclick="modalManager.openCursoModal(${c.id})">Editar</button>
+                                                <button class="btn-delete" onclick="crud.deleteCurso(${c.id})">Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+        }
+
+        // CRUD Operations
+        const crud = {
+            // Profesores
+            saveProfesor(data, id = null) {
+                let profesores = storage.get('profesores') || [];
+                
+                if (id) {
+                    // Editar
+                    profesores = profesores.map(p => p.id === id ? { ...data, id } : p);
+                } else {
+                    // Crear
+                    const newId = profesores.length > 0 ? Math.max(...profesores.map(p => p.id)) + 1 : 1;
+                    profesores.push({ ...data, id: newId });
+                }
+                
+                storage.set('profesores', profesores);
+                router.navigate('profesores');
+            },
+
+            deleteProfesor(id) {
+                if (confirm('¿Estás seguro de eliminar este profesor?')) {
+                    let profesores = storage.get('profesores') || [];
+                    profesores = profesores.filter(p => p.id !== id);
+                    storage.set('profesores', profesores);
+                    router.navigate('profesores');
+                }
+            },
+
+            // Cursos
+            saveCurso(data, id = null) {
+                let cursos = storage.get('cursos') || [];
+                
+                if (id) {
+                    cursos = cursos.map(c => c.id === id ? { ...data, id } : c);
+                } else {
+                    const newId = cursos.length > 0 ? Math.max(...cursos.map(c => c.id)) + 1 : 1;
+                    cursos.push({ ...data, id: newId });
+                }
+                
+                storage.set('cursos', cursos);
+                router.navigate('cursos');
+            },
+
+            deleteCurso(id) {
+                if (confirm('¿Estás seguro de eliminar este curso?')) {
+                    let cursos = storage.get('cursos') || [];
+                    cursos = cursos.filter(c => c.id !== id);
+                    storage.set('cursos', cursos);
+                    router.navigate('cursos');
+                }
+            }
+        };
+
+        // Modal Manager
+        const modalManager = {
+            open() {
+                document.getElementById('modal').classList.add('active');
+            },
+
+            close() {
+                document.getElementById('modal').classList.remove('active');
+            },
+
+            openProfesorModal(id = null) {
+                const profesor = id ? storage.get('profesores').find(p => p.id === id) : null;
+                
+                document.getElementById('modalTitle').textContent = id ? 'Editar Profesor' : 'Agregar Profesor';
+                document.getElementById('modalBody').innerHTML = `
+                    <form id="profesorForm">
+                        <div class="form-group">
+                            <label>Nombre:</label>
+                            <input type="text" name="nombre" value="${profesor ? profesor.nombre : ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" name="email" value="${profesor ? profesor.email : ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Especialidad:</label>
+                            <input type="text" name="especialidad" value="${profesor ? profesor.especialidad : ''}" required>
+                        </div>
+                        <button type="submit" class="btn">${id ? 'Actualizar' : 'Guardar'}</button>
+                    </form>
+                `;
+
+                this.open();
+
+                document.getElementById('profesorForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const data = Object.fromEntries(formData);
+                    crud.saveProfesor(data, id);
+                    this.close();
+                });
+            },
+
+            openCursoModal(id = null) {
+                const curso = id ? storage.get('cursos').find(c => c.id === id) : null;
+                const profesores = storage.get('profesores') || [];
+                
+                document.getElementById('modalTitle').textContent = id ? 'Editar Curso' : 'Agregar Curso';
+                document.getElementById('modalBody').innerHTML = `
+                    <form id="cursoForm">
+                        <div class="form-group">
+                            <label>Nombre:</label>
+                            <input type="text" name="nombre" value="${curso ? curso.nombre : ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Código:</label>
+                            <input type="text" name="codigo" value="${curso ? curso.codigo : ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Créditos:</label>
+                            <input type="number" name="creditos" value="${curso ? curso.creditos : ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Profesor:</label>
+                            <select name="profesorId" required>
+                                <option value="">Seleccionar...</option>
+                                ${profesores.map(p => `
+                                    <option value="${p.id}" ${curso && curso.profesorId === p.id ? 'selected' : ''}>
+                                        ${p.nombre}
+                                    </option>
+                                `).join('')}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">${id ? 'Actualizar' : 'Guardar'}</button>
+                    </form>
+                `;
+
+                this.open();
+
+                document.getElementById('cursoForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const data = Object.fromEntries(formData);
+                    data.profesorId = parseInt(data.profesorId);
+                    data.creditos = parseInt(data.creditos);
+                    crud.saveCurso(data, id);
+                    this.close();
+                });
+            }
+        };
+
+        // Inicializar Router
+        const router = new Router();
+
+        // Event Listeners
+        document.querySelectorAll('.nav-links button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                router.navigate(e.target.dataset.view);
+            });
+        });
+
+        document.getElementById('logout').addEventListener('click', () => {
+            storage.remove('sessionId');
+            router.isLoggedIn = false;
+            router.navigate('login');
+        });
+
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            modalManager.close();
+        });
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                modalManager.close();
+            }
+        });
+
+        // Iniciar aplicación
+        router.navigate(router.isLoggedIn ? 'dashboard' : 'login');
+    </script>
+</body>
+</html>
