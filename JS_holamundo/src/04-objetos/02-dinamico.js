@@ -9,7 +9,8 @@ usr.guardar()
 
 //usr = 1; esto si genera un error
 
-/*A pesar de ser una constante, al ser un objeto o array, este ultimo si "Puede" cambiar, lo unico que no
+/*A pesar de ser una constante, al ser un objeto o array, 
+este ultimo si "Puede" cambiar, lo unico que no
 es el hecho de ser un objeto o array*/ 
 
 //Una forma de evitar agregar o modificar un objeto es con el siguiente metodo
