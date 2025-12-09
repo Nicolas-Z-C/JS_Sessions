@@ -7,4 +7,3 @@ async function example(){
     console.log("Chanchito feliz por2")
 }
 
-/* La 
