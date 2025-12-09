@@ -23,5 +23,5 @@ async function obtenerData() {
         console.log(e.message)
     }
 };
-//La diferencia esque este codigo si acepta el reject, pues sin el try,catch un error romperia la aplicacion
+//La diferencia esque este codigo si acepta el reject, pues sin el try,catch un error romperia la aplicacion    
 obtenerData();
